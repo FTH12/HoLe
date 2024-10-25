@@ -219,7 +219,6 @@ class HoLe(nn.Module):
             t = time.time()
 
             z = self.encoder(self.sm_fea_s)  # 编码器获取嵌入
-            preds = self.inner_product_decoder(z).view(-1)  # 使用```python
             preds = self.inner_product_decoder(z).view(-1)  # 使用解码器生成预测值
             loss = self.bce_loss(preds, self.lbls, self.norm_weights, self.pos_weight)  # 计算二元交叉熵损失
 
@@ -261,7 +260,6 @@ class HoLe(nn.Module):
             ratio: 选择的节点比例
             edge_ratio_raw: 边添加比例
             del_ratio: 边删除比例
-
         Returns:
             更新后的邻接矩阵
         """
@@ -388,7 +386,6 @@ class HoLe(nn.Module):
         sm_fea_s = sp.csr_matrix(self.features).toarray()  # 将特征矩阵转换为稀疏格式
 
         adj_cp = copy.deepcopy(adj)  # 深拷贝邻接矩阵
-        self.adj_label = adj_cp  # 设置```python
         self.adj_label = adj_cp  # 设置邻接矩阵标签
 
         # 预处理图结构，进行规范化操作
@@ -396,7 +393,7 @@ class HoLe(nn.Module):
             adj_cp,
             self.n_gnn_layers,
             norm=self.norm,
-            renorm=self.renorm,
+            renorm=self.renorm,  # 是否让邻接矩阵+单位矩阵
         )
 
         adj_csr = adj_norm_s[0] if len(adj_norm_s) > 0 else adj_cp  # 获取规范化后的邻接矩阵
@@ -488,7 +485,6 @@ class HoLe(nn.Module):
                     None,
                 )
                 print(f"dump to {self.warmup_filename}")
-
         if gsl_epochs != 0:
             self._train()  # 训练模型
 
